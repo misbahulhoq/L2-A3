@@ -9,7 +9,6 @@ interface IApiResponse<T> {
 const sendResponse = <T>(res: Response, payload: IApiResponse<T>) => {
   return res.status(200).json({
     ...payload,
-    success: true,
   });
 };
 

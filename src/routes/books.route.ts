@@ -23,8 +23,7 @@ booksRouter.post("/", async (req, res) => {
   });
 });
 
-// get all books
-//TODO
+// get all books / filtered books
 booksRouter.get("/", async (req, res) => {
   const { filter, sortBy, sort, limit = 10 } = req.query;
   const filterConditions: any = {};
@@ -34,11 +33,9 @@ booksRouter.get("/", async (req, res) => {
   if (filter) filterConditions.genre = filter;
   if (sortBy) sortConditions[sortBy as string] = sort === "asc" ? 1 : -1;
 
-  const response = await Book.find({
-    ...(req.query.filter && { genre: req.query.filter }),
-  }).sort({
-    createdAt: 1,
-  });
+  const response = await Book.find(filterConditions)
+    .sort(sortConditions)
+    .limit(limitNum);
 
   sendResponse(res, {
     success: true,
