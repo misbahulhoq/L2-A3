@@ -16,30 +16,33 @@ interface IBook extends mongoose.Document {
   available: boolean;
 }
 
-const bookSchema = new Schema<IBook>({
-  title: { type: String, required: true },
-  author: { type: String, required: true },
-  genre: {
-    type: String,
-    required: true,
-    enum: [
-      "FICTION",
-      "NON_FICTION",
-      "SCIENCE",
-      "HISTORY",
-      "BIOGRAPHY",
-      "FANTASY",
-    ],
+const bookSchema = new Schema<IBook>(
+  {
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    genre: {
+      type: String,
+      required: true,
+      enum: [
+        "FICTION",
+        "NON_FICTION",
+        "SCIENCE",
+        "HISTORY",
+        "BIOGRAPHY",
+        "FANTASY",
+      ],
+    },
+    isbn: { type: String, required: true, unique: true },
+    description: { type: String, required: true },
+    copies: {
+      type: Number,
+      required: true,
+      min: [0, "Copies must be a positive number"],
+    },
+    available: { type: Boolean, required: true, default: true },
   },
-  isbn: { type: String, required: true, unique: true },
-  description: { type: String, required: true },
-  copies: {
-    type: Number,
-    required: true,
-    min: [0, "Copies must be a positive number"],
-  },
-  available: { type: Boolean, required: true, default: true },
-});
+  { timestamps: true }
+);
 
 export const Book = mongoose.model<IBook>("Book", bookSchema);
 export default Book;
