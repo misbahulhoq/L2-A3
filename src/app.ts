@@ -18,6 +18,6 @@ app.get("/", (_req, res) => {
 });
 
 routes(app);
-
 app.use(errorHandler);
+
 export default app;
