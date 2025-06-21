@@ -24,8 +24,22 @@ booksRouter.post("/", async (req, res) => {
 });
 
 // get all books
+//TODO
 booksRouter.get("/", async (req, res) => {
-  const response = await Book.find();
+  const { filter, sortBy, sort, limit = 10 } = req.query;
+  const filterConditions: any = {};
+  const sortConditions: any = {};
+  const limitNum = parseInt(limit as string);
+
+  if (filter) filterConditions.genre = filter;
+  if (sortBy) sortConditions[sortBy as string] = sort === "asc" ? 1 : -1;
+
+  const response = await Book.find({
+    ...(req.query.filter && { genre: req.query.filter }),
+  }).sort({
+    createdAt: 1,
+  });
+
   sendResponse(res, {
     success: true,
     message: "Books retrieved successfully",
