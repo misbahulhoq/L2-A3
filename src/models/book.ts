@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Document, Schema, Model } from "mongoose";
 
-interface IBook extends mongoose.Document {
+export interface IBook extends Document {
   title: string;
   author: string;
   genre:
@@ -15,8 +15,11 @@ interface IBook extends mongoose.Document {
   copies: number;
   available: boolean;
 }
+export interface IBookMethods {
+  getAvailableCopies(): number;
+}
 
-const bookSchema = new Schema<IBook>(
+const bookSchema = new Schema<IBook, Model<IBook>, IBookMethods>(
   {
     title: { type: String, required: true },
     author: { type: String, required: true },
@@ -41,9 +44,19 @@ const bookSchema = new Schema<IBook>(
     },
     available: { type: Boolean, required: true, default: true },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-export const Book = mongoose.model<IBook>("Book", bookSchema);
+bookSchema.methods.getAvailableCopies = function () {
+  return this.copies;
+};
+
+bookSchema.post("save", function () {
+  if (this.copies === 0) this.available = false;
+  this.save();
+});
+
+export const Book = mongoose.model<IBook, Model<IBook>>("Book", bookSchema);
 export default Book;
-export type { IBook };
