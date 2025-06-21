@@ -15,7 +15,12 @@ app.use(express_1.default.json());
 // connect to database
 (0, db_config_1.connectDB)();
 app.get("/", (_req, res) => {
-    res.send("Hello World!");
+    res.json({
+        status: "success",
+        message: "Server is up and running",
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || "development",
+    });
 });
 (0, routes_1.default)(app);
 app.use(errorHandler_1.default);
