@@ -32,7 +32,7 @@ booksRouter.get("/", async (req, res) => {
 
   if (filter) filterConditions.genre = filter;
   if (sortBy) sortConditions[sortBy as string] = sort === "asc" ? 1 : -1;
-
+  console.log(filterConditions);
   const response = await Book.find(filterConditions)
     .sort(sortConditions)
     .limit(limitNum);

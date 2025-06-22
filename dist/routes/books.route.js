@@ -44,6 +44,7 @@ booksRouter.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         filterConditions.genre = filter;
     if (sortBy)
         sortConditions[sortBy] = sort === "asc" ? 1 : -1;
+    console.log(filterConditions);
     const response = yield book_1.default.find(filterConditions)
         .sort(sortConditions)
         .limit(limitNum);
